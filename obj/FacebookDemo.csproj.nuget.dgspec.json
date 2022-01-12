@@ -1,0 +1,75 @@
+{
+  "format": 1,
+  "restore": {
+    "c:\\GitHub\\JerryChuang\\DotNetProjects\\FacebookDemo\\FacebookDemo.csproj": {}
+  },
+  "projects": {
+    "c:\\GitHub\\JerryChuang\\DotNetProjects\\FacebookDemo\\FacebookDemo.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "c:\\GitHub\\JerryChuang\\DotNetProjects\\FacebookDemo\\FacebookDemo.csproj",
+        "projectName": "FacebookDemo",
+        "projectPath": "c:\\GitHub\\JerryChuang\\DotNetProjects\\FacebookDemo\\FacebookDemo.csproj",
+        "packagesPath": "C:\\Users\\Jerry Chuang\\.nuget\\packages\\",
+        "outputPath": "c:\\GitHub\\JerryChuang\\DotNetProjects\\FacebookDemo\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Jerry Chuang\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "http://10.50.11.130:8081/repository/nuget-hosted/": {},
+          "http://entry.build.91app.io:8081/repository/nineyi-release-nuget/": {},
+          "http://master.build.91app.io:8081/repository/nineyi-release-nuget/": {},
+          "http://nuget.nine-yi/nuget/": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
+          "dependencies": {
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.404\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

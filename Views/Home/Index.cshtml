@@ -1,0 +1,59 @@
+@{
+    ViewData["Title"] = "Facebook Demo";
+}
+
+<div class="text-center">
+    <button id="fb-login-btn">Facebook Login</button>
+    <button id="hello">Hello</button>
+</div>
+
+<script>
+// Load the SDK asynchronously
+(function (d, s, id) {
+   var js, fjs = d.getElementsByTagName(s)[0];
+   if (d.getElementById(id)) return;
+   js = d.createElement(s); js.id = id;
+   js.src = "//connect.facebook.net/zh_TW/sdk.js";
+   fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+
+// async callback when fb sdk loaded
+window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '1207163082697132',
+      cookie     : true,                     // Enable cookies to allow the server to access the session.
+      xfbml      : true,                     // Parse social plugins on this webpage.
+      version    : 'v8.0'           // Use this Graph API version for this call.
+    });
+};
+
+function executeFbLogin () {
+    FB.login(function(response) {
+        if (response.authResponse) {
+            console.log('Welcome!  Fetching your information.... ');
+            FB.api('/me', function(response) {
+            console.log('Good to see you, ' + response.name + '.');
+        });
+        } else {
+            console.log('User cancelled login or did not fully authorize.');
+        }
+    }, { scope: 'public_profile,email,pages_read_engagement,pages_show_list' });
+}
+
+document.getElementById("fb-login-btn").onclick = executeFbLogin;
+
+function executeHelloWorld () {
+    var settings = {
+      "url": "https://199d-114-34-3-210.ngrok.io/Home/GetToken?name=jerry",
+      "method": "POST",
+      "timeout": 0,
+    };
+
+    $.ajax(settings).done(function (response) {
+        window.alert(response);
+        console.log(response);
+    });
+}
+
+document.getElementById("hello").onclick = executeHelloWorld;
+</script>
