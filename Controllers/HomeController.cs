@@ -39,9 +39,9 @@ namespace FacebookDemo.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetToken(string fanPageId, string userToken)
+        public IActionResult GetToken(string fanPageId, string acessToken)
         {
-            var result = GetFanPageAccessToken(fanPageId, userToken);
+            var result = GetFanPageAccessToken(fanPageId, acessToken);
             return Ok(new
             {
                 fanPageToken = result
@@ -75,6 +75,7 @@ namespace FacebookDemo.Controllers
         {
             var result = new ThirdPartyApiResultEntity<string>();
 
+            _logger.LogInformation($"fanPageId: {fanPageId}, userToken: {userToken}");
             using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = new Uri("https://graph.facebook.com");
@@ -93,6 +94,7 @@ namespace FacebookDemo.Controllers
 
                     result.Status = ThirdPartyApiResultStatusEnum.Failure;
                     result.ErrorMessage = errorMessage;
+                    _logger.LogInformation(JsonConvert.SerializeObject(result));
                     return result.Data;
                 }
 
@@ -103,6 +105,7 @@ namespace FacebookDemo.Controllers
                 result.Status = ThirdPartyApiResultStatusEnum.Success;
                 result.Data = fanPageToken;
 
+                _logger.LogInformation(JsonConvert.SerializeObject(result));
                 return result.Data;
             }
         }
@@ -173,7 +176,7 @@ namespace FacebookDemo.Controllers
         /// <summary>
         /// 非200情境下，Api回傳的完整資訊
         /// </summary>
-        [JsonIgnore]
+        // [JsonIgnore]
         public JObject ErrorResponse { get; set; }
     }
 
