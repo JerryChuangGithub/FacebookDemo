@@ -4,7 +4,6 @@
 
 <div class="text-center">
     <button id="fb-login-btn">Facebook Login</button>
-    <button id="hello">Hello</button>
 </div>
 
 <script>
@@ -39,37 +38,4 @@ function executeFbLogin () {
 }
 
 document.getElementById("fb-login-btn").onclick = executeFbLogin;
-
-function executeGetFanPageAccessToken (fanPageId, userToken) {
-    var settings = {
-      "url": "/Home/GetToken?fanPageId" + fanPageId + "&userToken=" + userToken,
-      "method": "POST",
-      "timeout": 0,
-    };
-
-    $.ajax(settings).done(function (response) {
-        window.alert(response);
-        console.log(response);
-    });
-}
-
-function executeEcho () {
-    var data = 'hello world'
-    echo(data);
-}
-
-function echo (data) {
-    var settings = {
-      "url": "/Home/Echo?data=" + data,
-      "method": "POST",
-      "timeout": 0,
-    };
-
-    $.ajax(settings).done(function (response) {
-        window.alert(response);
-        console.log(response);
-    });
-}
-
-document.getElementById("hello").onclick = executeEcho;
 </script>
