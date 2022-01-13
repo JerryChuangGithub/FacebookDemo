@@ -4,6 +4,7 @@
 
 <div class="text-center">
     <button id="fb-login-btn">Facebook Login</button>
+    <div id="store-list-area"></div>
 </div>
 
 <script>
@@ -26,16 +27,83 @@ window.fbAsyncInit = function() {
     });
 };
 
+let token
+
 function executeFbLogin () {
     FB.login(function(response) {
         if (response.authResponse) {
             console.log('Welcome!  Fetching your information.... ');
+            console.log('result of executeFbLogin is: ')
             console.log(response);
+            // 獲得帳號下的粉專列表
+            getStoreList(response);
         } else {
             console.log('User cancelled login or did not fully authorize.');
         }
     }, { scope: 'public_profile,email,pages_read_engagement,pages_show_list' });
 }
+
+// 傳送 token 給後端
+function getStoreList(response){
+  console.log('getStoreList, sending data: ')
+  const userId = response.authResponse.userID
+  const accessToken = response.authResponse.accessToken
+  console.log(userId);
+  console.log(accessToken);
+  token = response.authResponse.accessToken
+  console.log('also save token in global: ')
+  console.log(token)
+  const url = `/Home/GetFanPageList?userId=${userId}&acessToken=${accessToken}`
+  fetch(url,{method:'GET'})
+    .then((res) => {
+        console.log('getStoreList success: ')
+        console.log(res)
+        // 獲得回傳的商店列表
+        printStoreButton(res)
+    })
+    .catch((err) => console.log(err))
+}
+
+// 印出商店列表
+function printStoreButton(shopList){
+  console.log('now lets print button :')
+  console.log(shopList)
+  shopList.forEach((data)=>{ 
+      console.log(data) 
+      document.getElementById("store-list-area").innerHTML += 
+  `<input type="radio" id=${data.name} name="fan_page_list" value="${data.id}""><label for=${data.name}>${data.name}</label><br>`
+  })
+   document.getElementById("store-list-area").innerHTML += 
+  `<button onclick="sendStoreOption()">選完粉專之後按我</button>`
+}
+// 送出選取的商店列表
+function sendStoreOption(){
+  const fanPageId = document.querySelector('input[name="fan_page_list"]:checked').value;
+  const accessToken = token
+  console.log('送出選取的粉專id :')
+  consoel.log(fanPageId)
+  console.log(accessToken)
+  const url = `/Home/GetToken?fanPageId=${fanPageId}&acessToken=${accessToken}`
+  fetch(url,{method:'GET'})
+    .then((res) => {
+        console.log('獲得商店 token 成功: ')
+        console.log(res)
+        // 獲得 token
+        printStoreToken(res)
+    })
+    .catch((err) => console.log(err))
+  console.log('send store option')
+}
+// 獲得商店 token
+function printStoreToken(res){
+  console.log('print store token')
+  const token = res.fanPageToken;
+  console.log('我拿到的 token 是：')
+  console.log(token)
+  document.getElementById("store-list-area").innerHTML = 
+  `<div>${token}</div>`
+}
+
 
 document.getElementById("fb-login-btn").onclick = executeFbLogin;
 </script>
