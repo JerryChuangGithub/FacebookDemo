@@ -57,9 +57,12 @@ function getStoreList(response){
   fetch(url,{method:'GET'})
     .then((res) => {
         console.log('getStoreList success: ')
-        console.log(res)
+        return res.json()
+    }).then((data)=>{
+        console.log(data);
+        console.log(data.body);
         // 獲得回傳的商店列表
-        printStoreButton(res)
+        printStoreButton(data)
     })
     .catch((err) => console.log(err))
 }
@@ -87,9 +90,11 @@ function sendStoreOption(){
   fetch(url,{method:'GET'})
     .then((res) => {
         console.log('獲得商店 token 成功: ')
-        console.log(res)
+        return res.json();
+    }).then((data)=>{
         // 獲得 token
-        printStoreToken(res)
+        console.log(data);
+        printStoreToken(data);
     })
     .catch((err) => console.log(err))
   console.log('send store option')
