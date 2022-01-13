@@ -32,9 +32,16 @@ namespace FacebookDemo.Controllers
         }
 
         [HttpPost]
-        public IActionResult GetToken(string name)
+        public IActionResult Echo(string data)
         {
-            return Content($"hello {name}");
+            return Content($"Send data is: {data}");
+        }
+
+        [HttpPost]
+        public IActionResult GetToken(string fanPageId, string userToken)
+        {
+            var thirdPartyApiResult = GetFanPageAccessToken(fanPageId, userToken);
+            return Content(JsonConvert.SerializeObject(thirdPartyApiResult));
         }
         
         private ThirdPartyApiResultEntity<string> GetFanPageAccessToken(string fanPageId, string userToken)

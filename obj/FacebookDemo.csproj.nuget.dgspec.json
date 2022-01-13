@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\GitHub\\JerryChuang\\DotNetProjects\\FacebookDemo\\FacebookDemo.csproj": {}
+    "C:\\GitHub\\JerryChuang\\DotNetProjects\\FacebookDemo\\FacebookDemo.csproj": {}
   },
   "projects": {
-    "c:\\GitHub\\JerryChuang\\DotNetProjects\\FacebookDemo\\FacebookDemo.csproj": {
+    "C:\\GitHub\\JerryChuang\\DotNetProjects\\FacebookDemo\\FacebookDemo.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\GitHub\\JerryChuang\\DotNetProjects\\FacebookDemo\\FacebookDemo.csproj",
+        "projectUniqueName": "C:\\GitHub\\JerryChuang\\DotNetProjects\\FacebookDemo\\FacebookDemo.csproj",
         "projectName": "FacebookDemo",
-        "projectPath": "c:\\GitHub\\JerryChuang\\DotNetProjects\\FacebookDemo\\FacebookDemo.csproj",
+        "projectPath": "C:\\GitHub\\JerryChuang\\DotNetProjects\\FacebookDemo\\FacebookDemo.csproj",
         "packagesPath": "C:\\Users\\Jerry Chuang\\.nuget\\packages\\",
-        "outputPath": "c:\\GitHub\\JerryChuang\\DotNetProjects\\FacebookDemo\\obj\\",
+        "outputPath": "C:\\GitHub\\JerryChuang\\DotNetProjects\\FacebookDemo\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Jerry Chuang\\AppData\\Roaming\\NuGet\\NuGet.Config",

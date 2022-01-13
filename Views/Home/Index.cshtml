@@ -31,9 +31,7 @@ function executeFbLogin () {
     FB.login(function(response) {
         if (response.authResponse) {
             console.log('Welcome!  Fetching your information.... ');
-            FB.api('/me', function(response) {
-            console.log('Good to see you, ' + response.name + '.');
-        });
+            console.log(response);
         } else {
             console.log('User cancelled login or did not fully authorize.');
         }
@@ -42,9 +40,9 @@ function executeFbLogin () {
 
 document.getElementById("fb-login-btn").onclick = executeFbLogin;
 
-function executeHelloWorld () {
+function executeGetFanPageAccessToken (fanPageId, userToken) {
     var settings = {
-      "url": "https://199d-114-34-3-210.ngrok.io/Home/GetToken?name=jerry",
+      "url": "/Home/GetToken?fanPageId" + fanPageId + "&userToken=" + userToken,
       "method": "POST",
       "timeout": 0,
     };
@@ -55,5 +53,23 @@ function executeHelloWorld () {
     });
 }
 
-document.getElementById("hello").onclick = executeHelloWorld;
+function executeEcho () {
+    var data = 'hello world'
+    echo(data);
+}
+
+function echo (data) {
+    var settings = {
+      "url": "/Home/Echo?data=" + data,
+      "method": "POST",
+      "timeout": 0,
+    };
+
+    $.ajax(settings).done(function (response) {
+        window.alert(response);
+        console.log(response);
+    });
+}
+
+document.getElementById("hello").onclick = executeEcho;
 </script>
