@@ -84,7 +84,7 @@ function sendStoreOption(){
   const fanPageId = document.querySelector('input[name="fan_page_list"]:checked').value;
   const accessToken = token
   console.log('送出選取的粉專id :')
-  consoel.log(fanPageId)
+  console.log(fanPageId)
   console.log(accessToken)
   const url = `/Home/GetToken?fanPageId=${fanPageId}&acessToken=${accessToken}`
   fetch(url,{method:'GET'})
