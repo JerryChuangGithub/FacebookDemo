@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
@@ -31,20 +32,46 @@ namespace FacebookDemo.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        [HttpPost]
-        public IActionResult Echo(string data)
+        [HttpGet]
+        public IActionResult GetFanPageList(string userId, string acessToken)
         {
-            return Content($"Send data is: {data}");
+            return Ok(GetFanPageData(userId, acessToken));
         }
 
-        [HttpPost]
+        [HttpGet]
         public IActionResult GetToken(string fanPageId, string userToken)
         {
-            var thirdPartyApiResult = GetFanPageAccessToken(fanPageId, userToken);
-            return Content(JsonConvert.SerializeObject(thirdPartyApiResult));
+            var result = GetFanPageAccessToken(fanPageId, userToken);
+            return Ok(new
+            {
+                fanPageToken = result
+            });
         }
         
-        private ThirdPartyApiResultEntity<string> GetFanPageAccessToken(string fanPageId, string userToken)
+        private List<FacebookAccountsReponseEntity> GetFanPageData(string userId, string accessToken)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://graph.facebook.com");
+                client.DefaultRequestHeaders.Accept.Clear();
+                string exchangeToeknUrl = $@"/{userId}/accounts?&access_token={accessToken}";
+
+                HttpResponseMessage response = client.GetAsync(exchangeToeknUrl).Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = response.Content.ReadAsStringAsync().Result;
+                    var responseJson = JsonConvert.DeserializeObject<FacebookCommonResponseEntity<List<FacebookAccountsReponseEntity>>>(content);
+                    return responseJson.Data;
+                }
+                else
+                {
+                    throw new ApplicationException("Invalid data");
+                }
+            }
+        }
+
+        private string GetFanPageAccessToken(string fanPageId, string userToken)
         {
             var result = new ThirdPartyApiResultEntity<string>();
 
@@ -66,7 +93,7 @@ namespace FacebookDemo.Controllers
 
                     result.Status = ThirdPartyApiResultStatusEnum.Failure;
                     result.ErrorMessage = errorMessage;
-                    return result;
+                    return result.Data;
                 }
 
                 var responseContent = response.Content.ReadAsStringAsync().Result;
@@ -76,7 +103,7 @@ namespace FacebookDemo.Controllers
                 result.Status = ThirdPartyApiResultStatusEnum.Success;
                 result.Data = fanPageToken;
 
-                return result;
+                return result.Data;
             }
         }
     }
@@ -182,5 +209,61 @@ namespace FacebookDemo.Controllers
         /// </summary>
         [JsonProperty("error_user_msg")]
         public string ErrorUserMessage { get; set; }
+    }
+    
+    public class FacebookCommonResponseEntity<T>
+    {
+        /// <summary>
+        /// 資料
+        /// </summary>
+        [JsonProperty("data")]
+        public T Data { get; set; }
+
+        /// <summary>
+        /// 分頁，目前不處理
+        /// </summary>
+        [JsonProperty("paging")]
+        public object Paging { get; set; }
+    }
+    
+    public class FacebookAccountsReponseEntity
+    {
+        /// <summary>
+        /// access_token
+        /// </summary>
+        public string access_token { get; set; }
+
+        /// <summary>
+        /// 粉絲專業類型
+        /// </summary>
+        public string category { get; set; }
+
+        /// <summary>
+        /// 粉絲專業名稱
+        /// </summary>
+        public string name { get; set; }
+
+        /// <summary>
+        /// 粉絲專頁序號
+        /// </summary>
+        public string id { get; set; }
+
+        /// <summary>
+        /// 權限
+        /// </summary>
+        public List<string> perms { get; set; }
+    }
+    
+    public class KeyValuePairEntity
+    {
+        /// <summary>
+        /// 值
+        /// </summary>
+        public object Key { get; set; }
+        
+        /// <summary>
+        /// 顯示文字
+        /// </summary>
+        public string Value { get; set; }
     }
 }
