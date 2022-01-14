@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using FacebookDemo.Models;
@@ -41,11 +42,75 @@ namespace FacebookDemo.Controllers
         [HttpGet]
         public IActionResult GetToken(string fanPageId, string acessToken)
         {
-            var result = GetFanPageAccessToken(fanPageId, acessToken);
+            var fanPageAccessToken = GetFanPageAccessToken(fanPageId, acessToken);
+            var fanPageFeeds = GetFanPageFeeds(fanPageId, fanPageAccessToken);
+            var resultList = new List<object>();
+            var result = fanPageFeeds.Data
+                .OrderByDescending(x => x.CreatedTime)
+                .Select(x => new
+                {
+                    Message = x.Message
+                })
+                .ToList();
+
+            var index = 1;
+            foreach (var item in result)
+            {
+                resultList.Add(new
+                {
+                    PostIndex = index,
+                    Message = item.Message
+                });
+                index++;
+            }
             return Ok(new
             {
-                fanPageToken = result
+                // fanPageToken = JsonConvert.SerializeObject(result)
+                fanPageToken = resultList
             });
+        }
+
+        private FacebookApiResponse<FacebookFanPageFeed> GetFanPageFeeds(string fanPageId, string fanPageAccessToken)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://graph.facebook.com");
+                client.DefaultRequestHeaders.Accept.Clear();
+                string exchangeToeknUrl = $@"/{fanPageId}/feed?&access_token={fanPageAccessToken}";
+
+                HttpResponseMessage response = client.GetAsync(exchangeToeknUrl).Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = response.Content.ReadAsStringAsync().Result;
+                    _logger.LogInformation($"Get fan page feed response content: {content}");
+                    var responseJson = JsonConvert.DeserializeObject<FacebookApiResponse<FacebookFanPageFeed>>(content);
+                    return responseJson;
+                }
+                else
+                {
+                    _logger.LogInformation("Get fan page feed failed.");
+                    return new FacebookApiResponse<FacebookFanPageFeed>();
+                }
+            }
+        }
+
+        public class FacebookFanPageFeed
+        {
+            [JsonProperty("created_time")]
+            public DateTime CreatedTime { get; set; }
+            
+            [JsonProperty("message")]
+            public string Message { get; set; }
+            
+            [JsonProperty("id")]
+            public string Id { get; set; }
+        }
+
+        public class FacebookApiResponse<T>
+        {
+            [JsonProperty("data")]
+            public List<T> Data { get; set; }
         }
         
         private List<FacebookAccountsReponseEntity> GetFanPageData(string userId, string accessToken)
