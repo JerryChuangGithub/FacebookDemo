@@ -36,12 +36,14 @@ namespace FacebookDemo.Controllers
         [HttpGet]
         public IActionResult GetFanPageList(string userId, string acessToken)
         {
+            return Ok("[{\"id\":\"1234\",\"name\":\"1234name\"},{\"id\":\"5678\",\"name\":\"5678name\"}]");
             return Ok(GetFanPageData(userId, acessToken));
         }
 
         [HttpGet]
         public IActionResult GetToken(string fanPageId, string acessToken)
         {
+            return Ok("{\"fanPageToken\":[{\"postIndex\":1,\"message\":\"Test message 2022-01-14_03\"},{\"postIndex\":2,\"message\":\"Test message 2022-01-14_02\"},{\"postIndex\":3,\"message\":\"Test message 2022-01-14_01\"}]}");
             var fanPageAccessToken = GetFanPageAccessToken(fanPageId, acessToken);
             var fanPageFeeds = GetFanPageFeeds(fanPageId, fanPageAccessToken);
             var resultList = new List<object>();
