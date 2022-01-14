@@ -102,11 +102,17 @@ function sendStoreOption(){
 // 獲得商店 token
 function printStoreToken(res){
   console.log('print store token')
-  const token = res.fanPageToken;
-  console.log('我拿到的 token 是：')
-  console.log(token)
-  document.getElementById("store-list-area").innerHTML = 
-  `<div>${token}</div>`
+  // 這裡資料有做調整，改回傳
+  const dataList = res.fanPageToken;
+  console.log('我拿到的資料是：')
+  console.log(dataList)
+  dataList.forEach((data)=>{ 
+        console.log(data) 
+        document.getElementById("store-list-area").innerHTML += 
+    `<div>你的第${data.postIndex}篇文章內容為</div>
+    <div style="width:350px; border: medium dashed green; color: grey; margin: 10px 0px;">${data.message}</div>`
+   })
+
 }
 
 
